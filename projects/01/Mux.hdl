@@ -14,5 +14,17 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    // negations for later
+    Not(in=a, out=nota);
+    Not(in=b, out=notb);
+    Not(in=sel, out=notsel);
+    // the 3 simplified cases of the 4/8 cases that output 1
+    And(a=a, b=b, out=case1);
+    And(a=a, b=notb, out=anotb);
+    And(a=anotb, b=notsel, out=case2);
+    And(a=b, b=sel, out=bsel);
+    And(a=nota, b=bsel, out=case3);
+    // or the 3 cases together
+    Or(a=case1, b=case2, out=case12);
+    Or(a=case12, b=case3, out=out);
 }
