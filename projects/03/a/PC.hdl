@@ -16,5 +16,13 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // Use flags to decide which (of four) values should go into the register (effectively an if..elif..elif..else).
+    // Reset takes precedence, followed by load, then increment.
+    Inc16(in=o, out=outPlusOne);
+    Mux16(a=o, b=outPlusOne, sel=inc, out=sameOrInc); // keep same output or increment
+    Mux16(a=sameOrInc, b=in, sel=load, out=sameOrIncOrNew); // keep same output or increment or use new input
+    Mux16(a=sameOrIncOrNew, sel=reset, out=sameOrIncOrNewOrZero); // keep same output or increment use new input or use new input or set to zero
+
+    // a register is always loading a (new or changed) value depending on the flags
+    Register(in=sameOrIncOrNewOrZero, load=true, out=o, out=out);
 }
